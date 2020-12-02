@@ -125,11 +125,10 @@ if not os.path.exists('Helm'):
 if not os.path.exists("Helm/"+namespace):
     os.mkdir("Helm/"+namespace)
 os.chdir("Helm/"+namespace)
-f=open("values.yaml","w")
-f.write("namespace: "+namespace)
-f.write("\n")
-f.close
-valuesFile=os.path.abspath("values.yaml")
+if os.path.exists("values.yaml"):
+  os.remove("values.yaml")
+valuesFile=os.getcwd()+"/values.yaml"
+values("namespace: "+namespace)
 if not os.path.exists("templates"):
     os.mkdir("templates")
 copy_tree(path, "templates")
