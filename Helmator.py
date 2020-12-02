@@ -3,6 +3,7 @@ import yaml
 import sys
 import os
 from distutils.dir_util import copy_tree
+import shutil
 
 def values(text):
     global valuesFile
@@ -57,15 +58,18 @@ def persistentVolumeClaim(file):
         yaml.dump(data,f)
 
 def persistentVolumes(file):
-    '''
-    values("Pv:")
+    global first
+    if first:
+        values("Pv:")
+        first=False
     with open(file, 'r') as f:
         data = yaml.load(f, yaml.FullLoader)
     if "nfs" in data["spec"]:
         pv=os.path.splitext(os.path.basename(file))[0]
         paramNFS(data,pv)
-    yaml.dump(data,file)
-    '''
+    with open(file, 'w') as f:
+        yaml.dump(data,f)
+    
 def configMaps(file):
     '''
     values("Pv:")
@@ -74,7 +78,8 @@ def configMaps(file):
     if "nfs" in data["spec"]:
         pv=os.path.splitext(os.path.basename(file))[0]
         paramNFS(data,pv)
-    yaml.dump(data,file)
+    with open(file, 'w') as f:
+        yaml.dump(data,f)
     '''
 def secrets(file):
     with open(file, 'r') as f:
@@ -117,13 +122,14 @@ dirs = {   "deployments" : deployments,
            "configMaps" : configMaps,
 }
 
-
+first=True
 path = sys.argv[1]
 namespace=os.path.basename(os.path.normpath(path)).replace("-clean","")
 if not os.path.exists('Helm'):
     os.mkdir("Helm")
-if not os.path.exists("Helm/"+namespace):
-    os.mkdir("Helm/"+namespace)
+if os.path.exists("Helm/"+namespace):
+    shutil.rmtree("Helm/"+namespace, ignore_errors=True)    
+os.mkdir("Helm/"+namespace)
 os.chdir("Helm/"+namespace)
 if os.path.exists("values.yaml"):
   os.remove("values.yaml")
