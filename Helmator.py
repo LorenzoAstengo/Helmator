@@ -106,6 +106,12 @@ def serviceAccounts(file):
     with open(file, 'w') as f:
         yaml.dump(data,f)
 
+def createChartFile():
+    with open(file, 'w') as f:
+        f.write("apiVersion: 2\n")
+        f.write("name:"+namespace)
+        f.write("type: application")
+    
 
 dirs = {   "deployments" : deployments,
            "gateways" : gateways,
@@ -127,6 +133,8 @@ if os.path.exists("Helm/"+namespace):
     shutil.rmtree("Helm/"+namespace, ignore_errors=True)    
 os.mkdir("Helm/"+namespace)
 os.chdir("Helm/"+namespace)
+if not os.path.exists("Chart.yaml"):
+    createChartFile()
 if os.path.exists("values.yaml"):
   os.remove("values.yaml")
 valuesFile=os.getcwd()+"/values.yaml"
