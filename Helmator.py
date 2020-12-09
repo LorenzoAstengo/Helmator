@@ -109,8 +109,8 @@ def serviceAccounts(file):
 def createChartFile():
     with open("Chart.yaml", 'w') as f:
         f.write("apiVersion: 2\n")
-        f.write("name:"+namespace)
-        f.write("type: application")
+        f.write("name: "+namespace+"\n")
+        f.write("type: application\n")
     
 
 dirs = {   "deployments" : deployments,
