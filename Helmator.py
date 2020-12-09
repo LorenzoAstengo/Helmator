@@ -107,7 +107,7 @@ def serviceAccounts(file):
         yaml.dump(data,f)
 
 def createChartFile():
-    with open(file, 'w') as f:
+    with open("Chart.yaml", 'w') as f:
         f.write("apiVersion: 2\n")
         f.write("name:"+namespace)
         f.write("type: application")
