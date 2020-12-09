@@ -71,16 +71,12 @@ def persistentVolumes(file):
         yaml.dump(data,f)
     
 def configMaps(file):
-    '''
-    values("Pv:")
     with open(file, 'r') as f:
         data = yaml.load(f, yaml.FullLoader)
-    if "nfs" in data["spec"]:
-        pv=os.path.splitext(os.path.basename(file))[0]
-        paramNFS(data,pv)
+    paramNamespace(data)
     with open(file, 'w') as f:
         yaml.dump(data,f)
-    '''
+    
 def secrets(file):
     with open(file, 'r') as f:
         data = yaml.load(f, yaml.FullLoader)
